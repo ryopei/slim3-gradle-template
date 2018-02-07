@@ -65,13 +65,19 @@ dependencies {
 
 }
 
-//
-//sourceSets {
-//  main {
-//    java {
-//      srcDirs file("${projectDir}/build/generated/source/apt/main")
+
+
+
+////Ideaのgradleプロジェクトの同期が呼ばれた時だけsourceSetsを設定する(mac only)
+//if (project.gradle.startParameter.taskNames.empty
+//        && System.getenv()["XPC_SERVICE_NAME"]?.contains("com.jetbrains.intellij")) {
+//    sourceSets {
+//        main {
+//            java {
+//                srcDirs file("${projectDir}/build/generated/source/apt/main")
+//            }
+//        }
 //    }
-//  }
 //}
 
 gretty {
@@ -103,5 +109,3 @@ task updateSlim3Gen << {
         }
     }
 }
-
-
