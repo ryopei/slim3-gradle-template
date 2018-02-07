@@ -42,7 +42,6 @@ repositories {   // repositories for JARs you access in your code
 }
 
 
-
 dependencies {
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
     providedCompile 'com.google.appengine:appengine:+'
@@ -53,15 +52,17 @@ dependencies {
     compile 'javax.servlet:servlet-api:2.5'
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
-    // https://mvnrepository.com/artifact/com.googlecode.objectify/objectify
-    compile group: 'com.googlecode.objectify', name: 'objectify', version: '5.1.22'
+    //compileOnly 'org.projectlombok:lombok:1.16.20'
+    //apt "org.projectlombok:lombok:1.16.20"
 
-    compileOnly 'org.projectlombok:lombok:1.16.20'
-    apt "org.projectlombok:lombok:1.16.20"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'com.google.appengine', name: 'appengine-local-runtime', version: '1.9.60'
+    testCompile group: 'com.google.appengine', name: 'appengine-api-stubs', version: '1.9.60'
 
     def slim3Version = "1.0.17-SNAPSHOT";
     apt "org.slim3:slim3-gen-jsr269:${slim3Version}"
     compile "org.slim3:slim3:${slim3Version}"
+
 }
 
 //
@@ -86,21 +87,21 @@ appengine {
     }
 
     run {
-//    jvmFlags = ["-Dappengine.fullscan.seconds=5"]//enable hot reloading
-        jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000']
+        jvmFlags = ["-Dappengine.fullscan.seconds=5"]//enable hot reloading
+//        jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000']
     }
 }
 
-////ant task
-//ant.importBuild 'build.xml'
-//task updateSlim3Gen << {
-//    def file = project.configurations["apt"].files.find { it.name.contains("slim3-gen-js269") }
-//    if (file) {
-//        copy {
-//            from file
-//            into outFile
-//        }
-//    }
-//}
-//
+//ant task
+ant.importBuild 'build.xml'
+task updateSlim3Gen << {
+    def file = project.configurations["apt"].files.find { it.name.contains("slim3-gen-js269") }
+    if (file) {
+        copy {
+            from file
+            into outFile
+        }
+    }
+}
+
 
