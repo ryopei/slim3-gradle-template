@@ -15,7 +15,19 @@ gradleでslimを使うためのテンプレート。今さら新規でslim3を�
 git clone git@github.com:ryopei/slim3-gradle-template.git
 ```
 
-## web.xml
+## 適当にディレクトリ名を変更
+```
+mv slim3-gradle-template HogeHoge
+```
+
+## プロジェクト名を変更
+settings.gradleのプロジェクト名を変更する
+
+```
+rootProject.name = 'HogeHoge'
+```
+
+## web.xmlのルートパッケージを変更
 /src/main/webapp/WEB-INF/web.xmlを編集してslim3.rootPackageのparam-valueを任意のパッケージ名にする。
 ```
 <context-param>
