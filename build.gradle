@@ -1,0 +1,106 @@
+group = 'com.example.appengine'   // Generated output GroupId
+version = '1.0-SNAPSHOT'          // Version in generated output
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'org.akhikhl.gretty'
+apply plugin: 'com.google.cloud.tools.appengine'
+apply plugin: "net.ltgt.apt"
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
+
+buildscript {      // Configuration for building
+    repositories {
+        jcenter()      // Bintray's repository - a fast Maven Central mirror & more
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:+'
+        classpath 'org.akhikhl.gretty:gretty:+'
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.13"
+    }
+}
+
+repositories {   // repositories for JARs you access in your code
+    maven {
+        url 'https://maven-central.storage.googleapis.com'             // Google's mirror of Maven Central
+    }
+    jcenter()
+    mavenCentral()
+    maven {
+        url "http://slim3.github.com/slim3/"
+    }
+}
+
+
+
+dependencies {
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    providedCompile 'com.google.appengine:appengine:+'
+// Add your dependencies here.
+
+    compile 'com.google.appengine:appengine-endpoints:1.9.28' //add this line to avoid upper comment
+    compile 'com.google.appengine:appengine-endpoints-deps:1.9.28' //works also without this line
+    compile 'javax.servlet:servlet-api:2.5'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    // https://mvnrepository.com/artifact/com.googlecode.objectify/objectify
+    compile group: 'com.googlecode.objectify', name: 'objectify', version: '5.1.22'
+
+    compileOnly 'org.projectlombok:lombok:1.16.20'
+    apt "org.projectlombok:lombok:1.16.20"
+
+    def slim3Version = "1.0.17-SNAPSHOT";
+    apt "org.slim3:slim3-gen-jsr269:${slim3Version}"
+    compile "org.slim3:slim3:${slim3Version}"
+}
+
+//
+//sourceSets {
+//  main {
+//    java {
+//      srcDirs file("${projectDir}/build/generated/source/apt/main")
+//    }
+//  }
+//}
+
+gretty {
+    httpPort = 8080
+    contextPath = '/'
+    servletContainer = 'jetty9'  // What App Engine Flexible uses
+}
+
+appengine {
+    deploy {   // deploy configuration
+        stopPreviousVersion = true  // default - stop the current version
+        promote = true              // default - & make this the current version
+    }
+
+    run {
+//    jvmFlags = ["-Dappengine.fullscan.seconds=5"]//enable hot reloading
+        jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000']
+    }
+}
+
+////ant task
+//ant.importBuild 'build.xml'
+//task updateSlim3Gen << {
+//    def file = project.configurations["apt"].files.find { it.name.contains("slim3-gen-js269") }
+//    if (file) {
+//        copy {
+//            from file
+//            into outFile
+//        }
+//    }
+//}
+//
+
