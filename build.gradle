@@ -73,7 +73,7 @@ if (project.gradle.startParameter.taskNames.empty) {
     sourceSets {
         main {
             java {
-                srcDirs file("${projectDir}/build/generated/source/apt/main")
+                srcDir file("${projectDir}/build/generated/source/apt/main")
             }
         }
     }
