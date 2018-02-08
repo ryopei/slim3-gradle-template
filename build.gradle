@@ -68,17 +68,16 @@ dependencies {
 
 
 
-////Ideaのgradleプロジェクトの同期が呼ばれた時だけsourceSetsを設定する(mac only)
-//if (project.gradle.startParameter.taskNames.empty
-//        && System.getenv()["XPC_SERVICE_NAME"]?.contains("com.jetbrains.intellij")) {
-//    sourceSets {
-//        main {
-//            java {
-//                srcDirs file("${projectDir}/build/generated/source/apt/main")
-//            }
-//        }
-//    }
-//}
+////Ideaのgradleプロジェクトの同期が呼ばれた時だけsourceSetsを設定する
+if (project.gradle.startParameter.taskNames.empty) {
+    sourceSets {
+        main {
+            java {
+                srcDirs file("${projectDir}/build/generated/source/apt/main")
+            }
+        }
+    }
+}
 
 gretty {
     httpPort = 8080
@@ -100,6 +99,7 @@ appengine {
 
 //ant task
 ant.importBuild 'build.xml'
+
 task updateSlim3Gen << {
     def file = project.configurations["apt"].files.find { it.name.contains("slim3-gen-js269") }
     if (file) {
