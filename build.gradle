@@ -6,6 +6,7 @@ apply plugin: 'war'
 apply plugin: 'org.akhikhl.gretty'
 apply plugin: 'com.google.cloud.tools.appengine'
 apply plugin: "net.ltgt.apt"
+apply plugin: "net.ltgt.apt-idea"
 
 
 sourceCompatibility = 1.8
@@ -67,20 +68,6 @@ dependencies {
     apt "org.slim3:slim3-gen-jsr269:${slim3Version}"
     compile "org.slim3:slim3:${slim3Version}"
 
-}
-
-
-
-
-////Ideaのgradleプロジェクトの同期が呼ばれた時だけsourceSetsを設定する
-if (project.gradle.startParameter.taskNames.empty) {
-    sourceSets {
-        main {
-            java {
-                srcDir file("${projectDir}/build/generated/source/apt/main")
-            }
-        }
-    }
 }
 
 gretty {
