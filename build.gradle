@@ -8,13 +8,16 @@ apply plugin: 'com.google.cloud.tools.appengine'
 apply plugin: "net.ltgt.apt"
 apply plugin: "net.ltgt.apt-idea"
 
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
+ext {
+    appengineVersion = "1.9.60"
+    slim3Version = "1.0.17-SNAPSHOT"
+}
 
 buildscript {      // Configuration for building
     repositories {
@@ -42,21 +45,15 @@ repositories {   // repositories for JARs you access in your code
     }
 }
 
-
 dependencies {
-    def appengineVersion = "1.9.60"
-
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
     providedCompile "com.google.appengine:appengine:${appengineVersion}"
-// Add your dependencies here.
 
+    // Add your dependencies here.
     compile "com.google.appengine:appengine-endpoints:${appengineVersion}" //add this line to avoid upper comment
     compile "com.google.appengine:appengine-endpoints-deps:${appengineVersion}" //works also without this line
     compile 'javax.servlet:servlet-api:2.5'
     compile fileTree(include: ['*.jar'], dir: 'libs')
-
-    //compileOnly 'org.projectlombok:lombok:1.16.20'
-    //apt "org.projectlombok:lombok:1.16.20"
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'com.google.appengine', name: 'appengine-local-runtime', version: appengineVersion
@@ -64,10 +61,11 @@ dependencies {
     testCompile group: 'com.google.appengine', name: 'appengine-api-1.0-sdk', version: appengineVersion
     testCompile group: 'com.google.appengine', name: 'appengine-api-labs', version: appengineVersion
 
-    def slim3Version = "1.0.17-SNAPSHOT";
     apt "org.slim3:slim3-gen-jsr269:${slim3Version}"
     compile "org.slim3:slim3:${slim3Version}"
 
+    //compileOnly 'org.projectlombok:lombok:1.16.20'
+    //apt "org.projectlombok:lombok:1.16.20"
 }
 
 gretty {
